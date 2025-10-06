@@ -30,13 +30,23 @@ conda activate sophon
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 # Core deps
 pip install uproot numpy tqdm
-```sh
+```
 
-# Data
+## Data
 Once you have downlaoded the subset of the JetClass dataset, place the .root files in data/JetClass/val_5M. The example config file as well as the inference scrip, expect around 5 of the validation files to successfully run inference on them: 
 '''
 HToBB_120.root, HToBB_121.root,...,HToBB_124.root
-'''
 
+## Inference script
 
+Access the inference_jetclass.py file in this repository and download. The inference script:
+1. Reads particle-flow and scalar features from each event in the .root files
+2. Pads up to the 128 mparticles and skips events/logits events
+3. Calls the function getm_model from example_ParticleTransformer_sophon.py
+4. Writes CSV files with: file name, event index, truth label, some of the main kinematic features, and a 128-D vector embedding
+5. From a local terminal, run:
+```sh
+python inference_with_embedding.py
+```
+_It will take a couple minutes per root file_
    
