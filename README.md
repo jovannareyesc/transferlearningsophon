@@ -21,7 +21,7 @@ This README file focuses on one core task: running inference with Sophon on a su
 - uproot, numpy, tqdm, awkward
 
 ## Install for the new venv:
-'''
+```sh
 from repo_root/
 conda create -n sophon python=3.10 -y
 conda activate sophon
@@ -30,7 +30,7 @@ conda activate sophon
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 # Core deps
 pip install uproot numpy tqdm
-'''
+```sh
 
 # Data
 Once you have downlaoded the subset of the JetClass dataset, place the .root files in data/JetClass/val_5M. The example config file as well as the inference scrip, expect around 5 of the validation files to successfully run inference on them: 
