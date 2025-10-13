@@ -42,7 +42,7 @@ scalar_keys = [
 ]
 pf_keys = particle_keys + scalar_keys
 
-label_names = ["QCD","Hbb","Hcc","Hgg","H4q","Hqql","Zqq","Wqq","Tbqq","Tbl"]
+label_names = ["QCD","Hbb","Hcc","Hgg","Htoww4q","Hqql","Zqq","Znn","Htoww2q1L","Ttbar", "Ttbarlep"]
 
 
 class DummyDataConfig:
