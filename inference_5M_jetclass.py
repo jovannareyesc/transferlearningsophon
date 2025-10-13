@@ -12,7 +12,7 @@ sys.path.append(".")
 from networks.example_ParticleTransformer_sophon import get_model
 
 
-TARGET_EVENTS = 1_000_000      
+TARGET_EVENTS = 5_000_000      
 MAX_PART = 128                 
 STEP_SIZE = 5000               
 TREE_NAME = "tree"            
@@ -22,7 +22,7 @@ root_files = [
     "HToCC_120.root", "HToCC_121.root",
     "HToCC_122.root", "HToCC_123.root", "HToCC_124.root"
 ]
-OUTPUT_CSV = "inference_1M_with_embedding.csv"
+OUTPUT_CSV = "inference_5M_with_embedding.csv"
 
 particle_keys = [
     'part_px', 'part_py', 'part_pz', 'part_energy',
