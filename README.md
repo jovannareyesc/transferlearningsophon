@@ -49,4 +49,62 @@ Access the inference_jetclass.py file in this repository and download. The infer
 python inference_with_embedding.py
 ```
 _It will take a couple minutes per root file_
-   
+
+### Steps to follow in order to successfully run data through Sophon
+
+The steps that are required to be followed in order to run a comparison between QCD (in this case, background noise) and any of the other jet classes available in the val_5M dataset through Sophon are as follows:
+1. Select which jet class to compare to QCD.
+- For example, let's take the HToCC files.
+One will notice that in the val_5M dataset, there are a total of five files related to the HToCC class; all labeled as "HToCC_120.root", "HToCC_121.root",...,"HToCC_124.root". When feeding these to Sophon — or any other jet class, really — we must include all five files in our code as such:
+```sh
+root_files = ["HToCC_120.root", "HToCC_121.root","HToCC_122.root","HToCC_123.root","HToCC_124.root"]
+```
+2. Make sure you pf_keys is the correct dimension.
+- If the model receives any other dimensions when it comes to what we are feeding it, it will not run.
+Make sure pf_keys is composed of particle_keys + scalar_keys in order to run the data through the model successfully. Consequently, particle_keys and scalar_keys must each contain all labels that are in the inference script above. They must look like this:
+```sh
+particle_keys = [
+    'part_px', 'part_py', 'part_pz', 'part_energy',
+    'part_deta', 'part_dphi', 'part_d0val', 'part_d0err',
+    'part_dzval', 'part_dzerr', 'part_charge',
+    'part_isChargedHadron', 'part_isNeutralHadron',
+    'part_isPhoton', 'part_isElectron', 'part_isMuon'
+]
+scalar_keys = [
+    'label_QCD', 'label_Hbb', 'label_Hcc', 'label_Hgg',
+    'label_H4q', 'label_Hqql', 'label_Zqq', 'label_Wqq',
+    'label_Tbqq', 'label_Tbl', 'jet_pt', 'jet_eta', 'jet_phi',
+    'jet_energy', 'jet_nparticles', 'jet_sdmass', 'jet_tau1',
+    'jet_tau2', 'jet_tau3', 'jet_tau4', 'aux_genpart_eta',
+    'aux_genpart_phi', 'aux_genpart_pid', 'aux_genpart_pt',
+    'aux_truth_match'
+]
+```
+3. If you want a record of the inference, make sure to save it to a csv file.
+- In order to successfully save the data being run through Sophon, the cleanest and most accessible way to do it is to save the inference output into a csv file under an appropriate name (e.g.: inference_sophon.csv)
+To do this, we must first "import csv" at the very top of our inference script.
+-Then, before running the inference loop we create a new variable under an appropriate name as such:
+```sh
+OUTPUT_CSV = "inference_sophon.csv"
+```
+-For this to actually create and write into the CSV file, we must open the file using python's csv.writer before the event loop, and define the header row we want. For example:
+```sh
+with open(OUTPUT_CSV, mode="w", newline="") as csvfile:
+    writer = csv.writer(csvfile)
+
+    # write header (following format is what we have been using and what works best so far)
+    header = ["file", "event_index", "truth_label", "label_name"] + \
+             [f"emb_{j}" for j in range(128)]
+    writer.writerow(header)
+
+    # now begin your inference loop 
+    for i in range(total_events):
+        # compute embedding, truth label, etc.
+        row = [file_name, i, truth_label, label_name] + list(embedding)
+        writer.writerow(row)
+```
+In summary, the main points are:
+1. Open the file using with open(...) before the loop.
+2. Create the writer object.
+3. Write in the header.
+4. Write exactly one CSV row per event inside the inference loop.
